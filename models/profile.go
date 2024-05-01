@@ -25,7 +25,12 @@ type Profile struct {
 		Platform string `bson:"platform"`
 		URL      string `bson:"url"`
 	} `bson:"socialLinks"`
-	Skills    []string `bson:"skills"`
+	Skills       []string `bson:"skills"`
+	Certificates []struct {
+		Title string `bson:"title"`
+		By    string `bson:"by"`
+		URL   string `bson:"url"`
+	} `bson:"certificates"`
 	Education []struct {
 		Institution  string `bson:"institution"`
 		Degree       string `bson:"degree"`
