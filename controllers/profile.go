@@ -24,3 +24,13 @@ func AddProfile(context *gin.Context) {
 
 	context.JSON(http.StatusCreated, gin.H{"result": result})
 }
+
+func ViewProfile(context *gin.Context) {
+	profile, err := model.GetLatestProfile()
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"profile": profile})
+}

@@ -7,6 +7,6 @@ import (
 )
 
 func ProfileRoutes(server *gin.Engine) {
-	server.POST("/profile", controller.AddProfile)
+	server.GET("/profile", controller.ViewProfile).POST("/profile", controller.AddProfile)
 	server.GET("/resume")
 }

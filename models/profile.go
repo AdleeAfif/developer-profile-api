@@ -6,8 +6,10 @@ import (
 	"project/developer-profile-api/db"
 	"time"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type Profile struct {
@@ -60,4 +62,35 @@ func (p *Profile) Save() (*mongo.InsertOneResult, error) {
 	}
 
 	return result, nil
+}
+
+func GetLatestProfile() (*Profile, error) {
+	var profile Profile
+
+	// Find the latest document by sorting in descending order of the updatedAt field
+	opts := options.Find().SetSort(
+		bson.D{
+			bson.E{Key: "updatedAt", Value: -1},
+		},
+	).SetLimit(1)
+
+	cur, err := db.ProfileCollection.Find(context.TODO(), bson.D{}, opts)
+	if err != nil {
+		return nil, errors.New("error while getting latest profile")
+	}
+	defer cur.Close(context.TODO())
+
+	// Iterate over the cursor and decode the first (latest) document
+	if cur.Next(context.TODO()) {
+		err := cur.Decode(&profile)
+		if err != nil {
+			return nil, errors.New("error while decoding profile")
+		}
+	}
+
+	if err := cur.Err(); err != nil {
+		return nil, err
+	}
+
+	return &profile, nil
 }
