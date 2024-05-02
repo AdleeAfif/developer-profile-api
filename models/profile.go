@@ -94,3 +94,30 @@ func GetLatestProfile() (*Profile, error) {
 
 	return &profile, nil
 }
+
+func GetProfileByID(id primitive.ObjectID) (*Profile, error) {
+	var profile Profile
+
+	filter := bson.M{"_id": id}
+
+	err := db.ProfileCollection.FindOne(context.TODO(), filter).Decode(&profile)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, nil // Return nil and no error if no document is found
+		}
+		return nil, err
+	}
+
+	return &profile, nil
+}
+
+func UpdateByID(filter primitive.D, update primitive.D) (*mongo.UpdateResult, error) {
+
+	result, err := db.ProfileCollection.UpdateOne(context.TODO(), filter, update)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 	"project/developer-profile-api/db"
@@ -13,7 +12,8 @@ import (
 
 func main() {
 	godotenv.Load()
-	// Get Client, Context, CancelFunc and
+
+	// Get Client, Context and
 	// err from connect method.
 	client, ctx, err := db.Init(os.Getenv("MONGO_URI"))
 	server := gin.Default()
@@ -24,11 +24,10 @@ func main() {
 	// Release resource when the main
 	// function is returned.
 	defer client.Disconnect(ctx)
+
 	server.GET("/", getDefault)
 
 	router.ProfileRoutes(server)
-
-	fmt.Println(db.ProfileCollection)
 
 	server.Run(os.Getenv("PORT"))
 }
