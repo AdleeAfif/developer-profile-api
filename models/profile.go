@@ -80,12 +80,16 @@ func GetLatestProfile() (*Profile, error) {
 	}
 	defer cur.Close(context.TODO())
 
-	// Iterate over the cursor and decode the first (latest) document
-	if cur.Next(context.TODO()) {
-		err := cur.Decode(&profile)
-		if err != nil {
-			return nil, errors.New("error while decoding profile")
-		}
+	// Check if there are no documents in the cursor
+	if !cur.Next(context.TODO()) {
+		// If no documents found, return nil and no error
+		return nil, nil
+	}
+
+	// Decode the first (latest) document
+	err = cur.Decode(&profile)
+	if err != nil {
+		return nil, errors.New("error while decoding profile")
 	}
 
 	if err := cur.Err(); err != nil {
