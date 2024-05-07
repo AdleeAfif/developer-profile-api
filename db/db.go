@@ -19,6 +19,7 @@ import (
 // resource associated with it.
 
 var ProfileCollection *mongo.Collection
+var UserCollection *mongo.Collection
 
 func Init(uri string) (*mongo.Client, context.Context, error) {
 
@@ -41,6 +42,7 @@ func Init(uri string) (*mongo.Client, context.Context, error) {
 	database := client.Database("personal-api")
 
 	ProfileCollection = database.Collection("profile")
+	UserCollection = database.Collection("user")
 
 	return client, ctx, nil
 }
