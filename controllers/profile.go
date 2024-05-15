@@ -36,7 +36,18 @@ func ViewProfile(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"profile": profile})
+	newProfile := map[string]interface{}{
+		"Updated At":   profile.UpdatedAt,
+		"Bio":          profile.Bio,
+		"Location":     profile.Location.State + ", " + profile.Location.Country,
+		"Experience":   profile.Work,
+		"Skills":       profile.Skills,
+		"Certificates": profile.Certificates,
+		"Education":    profile.Education,
+		"Social Links": profile.SocialLinks,
+	}
+
+	context.JSON(http.StatusOK, gin.H{"About " + profile.Name.FirstName + " " + profile.Name.LastName: newProfile})
 }
 
 func UpdateProfile(context *gin.Context) {
