@@ -35,7 +35,7 @@ func main() {
 	router.ProfileRoutes(server)
 	router.UserRoutes(server)
 
-	fmt.Println("Current running version: 1.1.1")
+	fmt.Println("Current running version: 1.2.0")
 
 	server.Run(os.Getenv("PORT"))
 }
