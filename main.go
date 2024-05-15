@@ -6,7 +6,6 @@ import (
 	"os"
 	"project/developer-profile-api/db"
 	router "project/developer-profile-api/routers"
-	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -29,17 +28,7 @@ func main() {
 
 	server := gin.Default()
 
-	// CORS configuration
-	config := cors.Config{
-		AllowAllOrigins:  true,                                     // Replace with your front-end domain
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"}, // Allowed methods
-		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
-	}
-
-	server.Use(cors.New(config))
+	server.Use(cors.Default())
 
 	server.GET("/", getDefault)
 
