@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"project/developer-profile-api/db"
@@ -44,6 +45,8 @@ func main() {
 
 	router.ProfileRoutes(server)
 	router.UserRoutes(server)
+
+	fmt.Println("Current running version: 1.1")
 
 	server.Run(os.Getenv("PORT"))
 }
