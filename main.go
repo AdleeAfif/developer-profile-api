@@ -41,5 +41,11 @@ func main() {
 }
 
 func getDefault(context *gin.Context) {
-	context.JSON(http.StatusOK, gin.H{"message": "This is default route"})
+	routes := []map[string]string{
+		{"path": "/", "description": "Default route. Shows available routes."},
+		{"path": "/profile", "description": "This endpoint returns a detailed JSON object containing the profile information of Nik Adlee Afif Nik Mohd Kamil. The profile includes biographical details, certifications, education, work experience, location, skills, social links, and the last updated timestamp."},
+		// Add more routes as needed
+	}
+
+	context.JSON(http.StatusOK, gin.H{"available_routes": routes})
 }
