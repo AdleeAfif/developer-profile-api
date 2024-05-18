@@ -9,5 +9,5 @@ import (
 
 func ProfileRoutes(server *gin.Engine) {
 	server.GET("/profile", controller.ViewProfile).POST("/profile", middlewares.Authorize, controller.AddProfile).PUT("/profile", middlewares.Authorize, controller.UpdateProfile)
-	server.GET("/resume")
+	server.GET("/resume", controller.DownloadResume)
 }

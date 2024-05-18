@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 	"os"
+	"path/filepath"
 	model "project/developer-profile-api/models"
 	"time"
 
@@ -80,4 +81,18 @@ func UpdateProfile(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusOK, gin.H{"result": result})
+}
+
+func DownloadResume(context *gin.Context) {
+	// Path to your PDF file
+	pdfPath := "./misc/resume-adlee-18052024.pdf"
+
+	// Get the file name
+	fileName := filepath.Base(pdfPath)
+
+	// Set the Content-Disposition header to prompt download
+	context.Header("Content-Disposition", "attachment; filename="+fileName)
+
+	// Serve the file
+	context.File(pdfPath)
 }

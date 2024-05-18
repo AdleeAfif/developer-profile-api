@@ -35,7 +35,7 @@ func main() {
 	router.ProfileRoutes(server)
 	router.UserRoutes(server)
 
-	fmt.Println("Current running version: 1.2.0")
+	fmt.Println("Current running version: 1.3.0")
 
 	server.Run(os.Getenv("PORT"))
 }
@@ -43,7 +43,8 @@ func main() {
 func getDefault(context *gin.Context) {
 	routes := []map[string]string{
 		{"path": "/", "description": "Default route. Shows available routes."},
-		{"path": "/profile", "description": "This endpoint returns a detailed JSON object containing the profile information of Nik Adlee Afif Nik Mohd Kamil. The profile includes biographical details, certifications, education, work experience, location, skills, social links, and the last updated timestamp."},
+		{"path": "/profile", "description": "Returns a detailed JSON object containing the profile information of myself!"},
+		{"path": "/resume", "description": "Interested in employing me? Get my resume here!"},
 		// Add more routes as needed
 	}
 
