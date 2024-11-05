@@ -42,4 +42,9 @@ jobs:
 
             docker run -d --name developer-profile-api -p 8080:8080 \
               --label app=developer-profile-api \
+              -e PORT=${{ secrets.PORT }} \
+              -e MONGO_URI=${{ secrets.MONGO_URI }} \
+              -e DB_NAME=${{ secrets.DB_NAME }} \
+              -e DEFAULT_ID=${{ secrets.DEFAULT_ID }} \
+              -e SECRET_KEY=${{ secrets.SECRET_KEY }} \
               ${{ secrets.DOCKER_USERNAME }}/developer-profile-api:latest
