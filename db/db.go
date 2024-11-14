@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -21,7 +22,7 @@ import (
 var ProfileCollection *mongo.Collection
 var UserCollection *mongo.Collection
 
-func Init(uri string) (*mongo.Client, context.Context, error) {
+func Init() (*mongo.Client, context.Context, error) {
 
 	// ctx will be used to set deadline for process, here
 	// deadline will of 30 seconds.
@@ -31,7 +32,7 @@ func Init(uri string) (*mongo.Client, context.Context, error) {
 	defer cancel()
 
 	// mongo.Connect return mongo.Client method
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(os.Getenv("MONGO_URI")))
 
 	if err != nil {
 		return nil, nil, errors.New("error while connecting to mongoDB")
