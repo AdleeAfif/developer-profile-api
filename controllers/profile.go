@@ -1,9 +1,11 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"path/filepath"
+	"project/developer-profile-api/middlewares"
 	model "project/developer-profile-api/models"
 	"time"
 
@@ -31,6 +33,16 @@ func AddProfile(context *gin.Context) {
 }
 
 func ViewProfile(context *gin.Context) {
+
+	//TODO: Adjust format for caching data
+
+	cacheData, _ := middlewares.GetCache(context, middlewares.RedisClient, context.ClientIP(), context.Request.URL.Path)
+	if cacheData != "" {
+		// context.JSON(http.StatusOK, cacheData)
+		fmt.Println("Cache Data: " + cacheData)
+		return
+	}
+
 	profile, err := model.GetLatestProfile()
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": err})
@@ -47,6 +59,9 @@ func ViewProfile(context *gin.Context) {
 		"Education":    profile.Education,
 		"Social Links": profile.SocialLinks,
 	}
+
+	fmt.Println("Cache data not found!")
+	middlewares.SetCache(context, middlewares.RedisClient, context.ClientIP(), context.Request.URL.Path, newProfile, 60*time.Minute)
 
 	context.JSON(http.StatusOK, gin.H{"About " + profile.Name.FirstName + " " + profile.Name.LastName: newProfile})
 }

@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"project/developer-profile-api/db"
+	middlewares "project/developer-profile-api/middlewares"
 	router "project/developer-profile-api/routers"
 
 	"github.com/gin-contrib/cors"
@@ -15,16 +16,14 @@ import (
 func main() {
 	godotenv.Load()
 
-	// Get Client, Context and
-	// err from connect method.
-	client, ctx, err := db.Init(os.Getenv("MONGO_URI"))
+	redisClient := middlewares.InitRedis()
+	defer redisClient.Close()
+
+	mongoClient, mongoCtx, err := db.Init()
 	if err != nil {
 		panic(err)
 	}
-
-	// Release resource when the main
-	// function is returned.
-	defer client.Disconnect(ctx)
+	defer mongoClient.Disconnect(mongoCtx)
 
 	server := gin.Default()
 
