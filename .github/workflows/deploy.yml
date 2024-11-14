@@ -48,6 +48,7 @@ jobs:
             echo "DB_NAME=${{ secrets.DB_NAME }}" >> /tmp/.env
             echo "DEFAULT_ID=${{ secrets.DEFAULT_ID }}" >> /tmp/.env
             echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> /tmp/.env
+            echo "REDIS_URI=${{ secrets.REDIS_URI }}" >> /tmp/.env
 
             docker run -d \
               --name developer-profile-api \
