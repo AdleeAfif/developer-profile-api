@@ -37,17 +37,15 @@ func InitRedis() *redis.Client {
 
 func GetCache(ctx context.Context, redis *redis.Client, key string, endpoint string) (stringData string, err error) {
 
-	keyRedis := fmt.Sprintf(key, ':', endpoint)
+	keyRedis := key + "@" + endpoint
 
 	return redis.Get(ctx, keyRedis).Result()
 }
 
 func SetCache(ctx context.Context, redis *redis.Client, key string, endpoint string, data interface{}, expiredTime time.Duration) error {
 
-	// create key redis
-	keyRedis := fmt.Sprintf(key, ':', endpoint)
+	keyRedis := key + "@" + endpoint
 
-	// marshaling data
 	json, err := json.Marshal(data)
 	if err != nil {
 		return err

@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"fmt"
+	"encoding/json"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -34,12 +34,11 @@ func AddProfile(context *gin.Context) {
 
 func ViewProfile(context *gin.Context) {
 
-	//TODO: Adjust format for caching data
-
 	cacheData, _ := middlewares.GetCache(context, middlewares.RedisClient, context.ClientIP(), context.Request.URL.Path)
 	if cacheData != "" {
-		// context.JSON(http.StatusOK, cacheData)
-		fmt.Println("Cache Data: " + cacheData)
+		var dataToJson map[string]interface{}
+		json.Unmarshal([]byte(cacheData), &dataToJson)
+		context.JSON(http.StatusOK, dataToJson)
 		return
 	}
 
@@ -60,10 +59,11 @@ func ViewProfile(context *gin.Context) {
 		"Social Links": profile.SocialLinks,
 	}
 
-	fmt.Println("Cache data not found!")
-	middlewares.SetCache(context, middlewares.RedisClient, context.ClientIP(), context.Request.URL.Path, newProfile, 60*time.Minute)
+	respond := gin.H{"About " + profile.Name.FirstName + " " + profile.Name.LastName: newProfile}
 
-	context.JSON(http.StatusOK, gin.H{"About " + profile.Name.FirstName + " " + profile.Name.LastName: newProfile})
+	middlewares.SetCache(context, middlewares.RedisClient, context.ClientIP(), context.Request.URL.Path, respond, 60*time.Minute)
+
+	context.JSON(http.StatusOK, respond)
 }
 
 func UpdateProfile(context *gin.Context) {
